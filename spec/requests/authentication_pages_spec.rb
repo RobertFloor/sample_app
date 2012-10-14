@@ -20,11 +20,11 @@ describe "Authentication" do
                 it {should have_error_message}
 
 
-                describe "after visiting another page " do
-                  before {click_link "Home"}
-                    #it {should_not have_selector('div.alert.alert-error') }
-                    it {should_not have_error_message }
-                  end
+          describe "after visiting another page " do
+              before {click_link "Home"}
+                 #it {should_not have_selector('div.alert.alert-error') }
+                   it {should_not have_error_message }
+            end
 
                 end #with invalid information
 
@@ -61,10 +61,12 @@ describe "Authentication" do
                 fill_in "Password", with: user.password
                 click_button "Sign in"
               end
+
               describe "after singing in " do
                 it "should render the desired protected page" do
                   page.should have_selector('title',text: "Edit user")
                 end
+
                 describe "when signing in again" do
                   before do
                      click_link "Sign out"
@@ -73,9 +75,9 @@ describe "Authentication" do
                      fill_in "Password", with: user.password
                      click_button "Sign in"
                   end
-                  it "should render the default (profile) page" do
-                       page.should have_selector('title', text: user.name)
-                  end
+                    it "should render the default (profile) page" do
+                        page.should have_selector('title', text: user.name)
+                    end
                 end
               end
           end
@@ -83,6 +85,7 @@ describe "Authentication" do
 
 
           describe "in the Users controller" do
+
             describe "visiting the edit page" do
               before {visit edit_user_path(user)}
               it {should have_selector('title', text: "Sign in")}
@@ -93,10 +96,25 @@ describe "Authentication" do
                 before {put user_path(user)}
                 specify {response.should redirect_to(signin_path)}
               end
+
               describe "visiting the user index" do
                 before {visit users_path}
                   it {should have_selector('title', text: 'Sign in')}
               end
+
+          end
+      end
+
+      describe "in the micropost controller" do
+
+          describe "submitting to the create action" do
+            before {post microposts_path}
+            specify {response.should redirect_to(signin_path)}
+          end
+
+          describe "submitting to the destroy action" do
+            before { delete micropost_path(FactoryGirl.create(:micropost)) }
+            specify {response.should redirect_to(signin_path)}
           end
       end
 
