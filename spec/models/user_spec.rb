@@ -29,8 +29,16 @@ describe User do
               User.new(admin: "1")
            end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
         end
-
     end
+
+ describe "with admin attribute set to 'true'" do
+    before do
+      @user.save!
+      @user.toggle!(:admin)
+    end
+
+    it { should be_admin }
+  end
 
    describe "when name is not present" do
      before {@user.name= " "}
